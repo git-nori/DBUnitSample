@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ DAO UT用トランザクション系設定。
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+    <bean id="mySqlDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
+      <property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>
+      <property name="url"><value>jdbc:mysql://localhost:3306/shoeisha</value></property>
+      <property name="username"><value>root</value></property>
+      <property name="password"><value>root</value></property>
+      <property name="initialSize"><value>1</value></property>
+      <property name="maxActive"><value>1</value></property>
+      <property name="maxIdle"><value>1</value></property>
+      <property name="maxWait"><value>-1</value></property>
+      <property name="defaultAutoCommit"><value>false</value></property>
+    </bean>
+
+  <!-- トランザクション対象クラスの設定 -->
+  <!-- 変更しないこと -->
+  <aop:config>
+    <aop:advisor pointcut="execution(* jp.co.shoeisha.*..*Dao.*(..)))"
+        advice-ref="txAdvice" />
+  </aop:config>
+
+</beans>

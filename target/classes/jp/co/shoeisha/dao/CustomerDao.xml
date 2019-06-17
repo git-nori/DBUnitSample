@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Customer" >
+
+    <resultMap id="Customer.Result" class="jp.co.shoeisha.model.Customer" >
+        <result column="CUSTOMER_CD" property="customerCd" jdbcType="NUMBER" javaType="Long" />
+        <result column="CUSTOMER_TYPE" property="customerType" jdbcType="VARCHAR" javaType="String" />
+        <result column="CUSTOMER_NAME" property="customerName" jdbcType="VARCHAR" javaType="String" />
+        <result column="CREATE_DATETIME" property="createDateTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+        <result column="LAST_UPDATE_DATETIME" property="lastUpdateDateTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+    </resultMap>
+
+    <insert id="Customer.insert" parameterClass="jp.co.shoeisha.model.Customer" >
+        INSERT INTO T_CUSTOMER (
+            CUSTOMER_CD,
+            CUSTOMER_TYPE,
+            CUSTOMER_NAME,
+            CREATE_DATETIME,
+            LAST_UPDATE_DATETIME
+        ) VALUES (
+            #customerCd#,
+            #customerType#,
+            #customerName#,
+            #createDateTime#,
+            #lastUpdateDateTime#
+        )
+    </insert>
+
+    <update id="Customer.updateByPrimaryKey" parameterClass="jp.co.shoeisha.model.Customer" >
+        UPDATE T_CUSTOMER
+            SET
+                CUSTOMER_NAME = #customerName#,
+                LAST_UPDATE_DATETIME = #lastUpdateDateTime#
+            WHERE
+                CUSTOMER_CD = #customerCd# AND
+                CUSTOMER_TYPE = #customerType# AND
+                LAST_UPDATE_DATETIME = #beforeLastUpdateDateTime#
+    </update>
+
+    <delete id="Customer.deleteByPrimaryKey" parameterClass="jp.co.shoeisha.model.Customer" >
+        DELETE FROM T_CUSTOMER
+            WHERE
+                CUSTOMER_CD = #customerCd# AND
+                CUSTOMER_TYPE = #customerType#
+    </delete>
+
+    <select id="Customer.findByKey" resultMap="Customer.Result"
+      parameterClass="jp.co.shoeisha.model.Customer" >
+        SELECT * FROM T_CUSTOMER
+            WHERE
+                CUSTOMER_CD = #customerCd# AND
+                CUSTOMER_TYPE = #customerType#
+    </select>
+
+
+    <select id="Customer.findByCustomerCd" resultMap="Customer.Result"
+      parameterClass="Long" >
+        SELECT * FROM T_CUSTOMER
+            WHERE
+                CUSTOMER_CD = #value#
+        ORDER BY CUSTOMER_CD,CUSTOMER_TYPE
+    </select>
+
+
+    <select id="Customer.findByAny" resultMap="Customer.Result"
+      parameterClass="jp.co.shoeisha.model.Customer" >
+      SELECT * FROM T_CUSTOMER
+        <dynamic prepend="WHERE">
+            <isNotEmpty property="customerCd" prepend="and">
+                CUSTOMER_CD = #customerCd#
+            </isNotEmpty>
+            <isNotEmpty property="customerName" prepend="and">
+                CUSTOMER_NAME LIKE #customerName#
+            </isNotEmpty>
+        </dynamic>
+        ORDER BY CUSTOMER_CD,CUSTOMER_TYPE
+    </select>
+</sqlMap>

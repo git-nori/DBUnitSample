@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+  <!-- アプリケーションデバッグ用のアペンダ -->
+  <appender name="DEBUG_LOG" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="File" value="/tmp/alog/debug.log" />
+    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+    <param name="encoding" value="UTF-8" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d{yyyy/MM/dd HH:mm:ss}]%-5p %C (%L) - %m%n" />
+    </layout>
+  </appender>
+
+  <!-- FW用のアペンダ -->
+  <appender name="ORG_LOG" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="File" value="/tmp/alog/org.log" />
+    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+    <param name="encoding" value="UTF-8" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="[%d{yyyy/MM/dd HH:mm:ss}]%-5p %C (%L) - %m%n" />
+    </layout>
+  </appender>
+
+  <category name="jp.co.shoeisha">
+    <priority value="DEBUG" />
+    <appender-ref ref="DEBUG_LOG" />
+  </category>
+
+  <category name="net">
+    <priority value="INFO" />
+    <appender-ref ref="ORG_LOG" />
+  </category>
+
+  <category name="org">
+    <priority value="INFO" />
+    <appender-ref ref="ORG_LOG" />
+  </category>
+
+  <category name="com">
+    <priority value="INFO" />
+    <appender-ref ref="ORG_LOG" />
+  </category>
+
+  <category name="java">
+    <priority value="INFO" />
+    <appender-ref ref="ORG_LOG" />
+  </category>
+
+</log4j:configuration>
